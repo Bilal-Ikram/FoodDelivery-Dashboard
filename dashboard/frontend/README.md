@@ -10,3 +10,6 @@ Currently, two official plugins are available:
 ## Usage
     port: 5174, // Run on port 5174 for frontend of dashboard.
 http://dashboard.localhost:5174/
+
+### Install dependencies
+npm install flowbite flowbite-react tailwindcss
