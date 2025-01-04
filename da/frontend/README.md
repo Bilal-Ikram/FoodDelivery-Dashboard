@@ -16,7 +16,8 @@ npx tailwindcss init
 touch tailwind.config.js
 
 // Add the following content to tailwind.config.js
-module.exports = {
+/** @type {import('tailwindcss').Config} */
+export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {},
@@ -29,12 +30,13 @@ Add tailwindcss and autoprefixer to your postcss.config.js file, or wherever Pos
 touch postcss.config.js
 
 // Add the following content to postcss.config.js
-module.exports = {
-    plugins: {
-        tailwindcss: {},
-        autoprefixer: {},
-    },
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
 }
+
 
 Add the @tailwind directives for each of Tailwind’s layers to your main CSS file.
 // Create a new file named index.css in src
