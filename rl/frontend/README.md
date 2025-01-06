@@ -6,7 +6,7 @@ http://dashboard.localhost:5174/
 ### Install dependencies
 npm create vite@latest
 // react dependencies
-npm install lucide-react react react-dom react-router-dom
+npm install lucide-react react react-dom react-router-dom axios
 
 // Install tailwindcss and its peer dependencies via npm, and create your tailwind.config.js file.
 npm install -D tailwindcss postcss autoprefixer
