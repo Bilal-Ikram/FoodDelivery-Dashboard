@@ -1,5 +1,4 @@
-// src/pages/SignupPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import axios from 'axios';
 import * as Yup from 'yup';
 import { toast, ToastContainer } from 'react-toastify';
@@ -13,8 +12,15 @@ const validationSchema = Yup.object().shape({
   restaurantName: Yup.string().required('Restaurant Name is required'),
   name: Yup.string().required('Name is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),
+  password: Yup.string()
+    .min(8, 'Password must be at least 8 characters')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+      'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character'
+    )
+    .required('Password is required'),
   phoneNo: Yup.string()
-    .matches(/^\d{11}$/, 'Phone number must be 10 digits')
+    .matches(/^\d{11}$/, 'Phone number must be 11 digits')
     .required('Phone number is required'),
   restaurantAddress: Yup.string().required('Restaurant Address is required'),
 });
@@ -27,29 +33,44 @@ export default function SignupPage() {
   const [touched, setTouched] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = React.useCallback((e) => {
+  const validateField = async (name, value) => {
+    try {
+      await validationSchema.validateAt(name, { [name]: value });
+      setErrors(prev => ({ ...prev, [name]: undefined }));
+    } catch (err) {
+      setErrors(prev => ({ ...prev, [name]: err.message }));
+    }
+  };
+
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    validateField(name, value);
+  }, []);
 
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  }, [errors]);
-
-  const handleBlur = React.useCallback((e) => {
+  const handleBlur = useCallback((e) => {
     const { name } = e.target;
     setTouched(prev => ({ ...prev, [name]: true }));
-  }, []);
+    validateField(name, formData[name]);
+  }, [formData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    // Mark all fields as touched
+    const allTouched = FORM_FIELDS.reduce((acc, field) => ({
+      ...acc,
+      [field.name]: true
+    }), {});
+    setTouched(allTouched);
+
     try {
       // Validate the form data
       await validationSchema.validate(formData, { abortEarly: false });
 
       // Submit the form data
-      await axios.post('http://localhost:8000/api/v1/restaurants/register',formData);
+      await axios.post('http://localhost:8000/api/v1/restaurants/register', formData);
 
       // Reset form fields after successful submission
       setFormData(createInitialState(FORM_FIELDS));
@@ -78,9 +99,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen relative">
-      {/* Toast-Container */}
       <ToastContainer />
-      {/* Fixed background image */}
       <div className="fixed inset-0 w-full h-full">
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
@@ -91,9 +110,7 @@ export default function SignupPage() {
         <div className="absolute inset-0 bg-black/40" />
       </div>
 
-      {/* Main content container */}
       <div className="relative min-h-screen flex flex-col">
-        {/* Header with logo */}
         <header className="bg-white z-10 p-3">
           <img
             src="/images/logo-foodpanda.png"
@@ -102,7 +119,6 @@ export default function SignupPage() {
           />
         </header>
 
-        {/* Scrollable form section */}
         <main className="flex-1 overflow-auto px-2 py-6 mt-8 ml-24">
           <div className="max-w-[520px] bg-white shadow-lg p-8">
             <h2 className="text-xl font-roboto font-black text-center mb-6 text-[#4a4a4a] text-wrap">
@@ -137,7 +153,6 @@ export default function SignupPage() {
           </div>
         </main>
 
-        {/* Footer */}
         <footer className="relative bg-gray-900 text-white p-4">
           <div className="flex justify-between items-center max-w-7xl mx-auto pb-32">
             <div>

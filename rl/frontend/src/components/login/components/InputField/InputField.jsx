@@ -37,7 +37,7 @@ const InputField = ({
           {label}
         </label>
         {rightIcon && (
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+          <div className="absolute right-1 top-1/2 transform -translate-y-1/2">
             {rightIcon}
           </div>
         )}

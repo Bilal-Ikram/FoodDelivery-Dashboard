@@ -9,11 +9,11 @@ import sendEmail from '../utils/Email.js';
 
 const registerRestaurant =asyncHandler( async (req, res) => {
   try {
-    const { restaurantName, name, email, phoneNo, restaurantAddress } = req.body;
+    const { restaurantName, name, email, password, phoneNo, restaurantAddress } = req.body;
 
     // Checking if user,email snd pass are empty or user has left them empty
     if (
-        [name,restaurantName, email, restaurantAddress,phoneNo].some((field) =>
+        [name,restaurantName, email, password, restaurantAddress,phoneNo].some((field) =>
             field.trim().length === 0)
     ) {
         throw new ApiError(400, "All fields are required");
@@ -29,6 +29,7 @@ const registerRestaurant =asyncHandler( async (req, res) => {
       restaurantName,
       name,
       email,
+      password,
       phoneNo,
       restaurantAddress,
     });
