@@ -3,6 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from '../utils/ApiError.js';
 import { User } from "../models/user.model.js";
 import sendEmail from '../utils/Email.js';
+import { verifyJWT } from './../middlewares/auth.middleware.js';
 
 // Create new user
 // backend/controllers/restaurantController.js
@@ -156,4 +157,52 @@ const logoutUser = asyncHandler(async (req, res) => {
    .json(new ApiResponse(200, 'User logged out successfully'));
 
 });
-export { registerRestaurant, loginUser, logoutUser };
+
+// Refresh token
+
+const refreshToken = asyncHandler(async (req, res) => {
+  // Get the refresh token from the request
+  const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
+  if (!incomingRefreshToken) {
+    throw new ApiError(401, 'No refresh token provided');
+  }
+  // Verify the refresh token
+ try {
+  const decodedToken=  verifyJWT(
+     incomingRefreshToken,
+     process.env.REFRESH_TOKEN_SECRET,
+   )
+  const user= await User.findById(decodedToken?._id)
+  if (!user) {
+     throw new ApiError(403, 'Unauthorized');
+   }
+   // matching 
+   if ( incomingRefreshToken !==user?.refreshToken) {
+     throw new ApiError(403, 'Refresh TOken is expored or used');
+   }
+   const options={
+     httpOnly: true,
+     secure: true
+   }
+ const {accessToken, newRefreshToken }=await generateAccessAndRefreshToken(user._id);
+ return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", newRefreshToken, options)
+    .json(
+       new ApiResponse(
+         200,
+         { accessToken, newRefreshToken },
+         'User refreshed successfully'
+       )
+     )
+ } catch (error) {
+  throw new ApiError(401, error?.message || 
+     'Invalid refresh token or expired token'
+  )
+ }
+
+})
+
+
+export { registerRestaurant, loginUser, logoutUser, refreshToken };
