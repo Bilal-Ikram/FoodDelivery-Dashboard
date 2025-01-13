@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import * as Yup from 'yup';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FORM_FIELDS } from '../constants/formFields';
 import { createInitialState } from '../utils/formUtils';
@@ -49,7 +49,7 @@ export default function SignupPage() {
       await validationSchema.validate(formData, { abortEarly: false });
 
       // Submit the form data
-      await axios.post('/api/v1/restaurants/register', formData);
+      await axios.post('http://localhost:8000/api/v1/restaurants/register',formData);
 
       // Reset form fields after successful submission
       setFormData(createInitialState(FORM_FIELDS));
@@ -78,6 +78,8 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen relative">
+      {/* Toast-Container */}
+      <ToastContainer />
       {/* Fixed background image */}
       <div className="fixed inset-0 w-full h-full">
         <div
@@ -92,23 +94,23 @@ export default function SignupPage() {
       {/* Main content container */}
       <div className="relative min-h-screen flex flex-col">
         {/* Header with logo */}
-        <header className="bg-white z-10 p-5">
+        <header className="bg-white z-10 p-3">
           <img
             src="/images/logo-foodpanda.png"
             alt="Foodpanda"
-            className="h-[42px] pl-4"
+            className="h-[34px] pl-4"
           />
         </header>
 
         {/* Scrollable form section */}
-        <main className="flex-1 overflow-auto px-4 py-6 mt-10 ml-32">
-          <div className="max-w-[624px] bg-white shadow-lg p-8">
-            <h2 className="text-2xl font-roboto font-black text-center mb-6 text-[#4a4a4a] text-wrap">
+        <main className="flex-1 overflow-auto px-2 py-6 mt-8 ml-24">
+          <div className="max-w-[520px] bg-white shadow-lg p-8">
+            <h2 className="text-xl font-roboto font-black text-center mb-6 text-[#4a4a4a] text-wrap">
               Interested? Fill out the form below to become our partner and increase your income!
             </h2>
 
             <form onSubmit={handleSubmit} className="">
-              <div className="max-w-[520px] p-6">
+              <div className="max-w-[500px] p-2">
                 <div className="">
                   {FORM_FIELDS.map(field => (
                     <FormField

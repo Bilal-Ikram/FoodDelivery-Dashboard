@@ -24,7 +24,7 @@ const FormField = ({
       onChange={onChange}
       onBlur={onBlur}
       aria-describedby={ariaDescribedby} // Use the prop here
-      className={`block w-[520px] rounded-sm border px-3 py-[14px] border-[#dcdcdc] text-[#333] ${
+      className={`block w-[440px] rounded-md border px-3 py-[8px] border-[#dcdcdc] text-[#333] ${
         error && touched ? 'border-red-500' : 'border-[#33333]'
       } focus:outline-none`}
     />

@@ -12,7 +12,7 @@ app.use(cors({
     optionsSuccessStatus: 200
 }))
 
-const port = process.env.PORT || 6000
+const port = process.env.PORT || 8000
 
  const server = function serverListening () {
      app.listen(port, () => {
@@ -38,6 +38,12 @@ app.use(express.static('public'))
 
 
 //routes
+import restaurantRoutes from "./routes/restaurantRoutes.js"
+ // '/api/v1/restaurants' path k liay restaurant routes import karay kariy
+ // restaurantRoutes.js file maay restaurant routes defiimport { restaurantRoutes } from 'file:///C:/Users/Dell/OneDrive/Desktop/FoodDeliveryDashboard/rs/rl/backend/routes/restaurantRoutes.js';
+
+ // restaurantRoutes.js file maay app.use('/api/v1/restaurants', restaurantRoutes); line k liay kariy
+app.use('/api/v1/restaurants', restaurantRoutes);
 
 
 export { app }

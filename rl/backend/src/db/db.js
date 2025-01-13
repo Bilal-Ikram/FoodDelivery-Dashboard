@@ -12,9 +12,7 @@ const connectDB = async function dbConnection() {
     try {
         const connectionInstance = await mongoose.connect(`${mongoURL}/${DB_NAME}`,
              {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-                serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
+                serverSelectionTimeoutMS: 50000, // Increase timeout to 30 seconds
                 socketTimeoutMS: 45000 // Increase socket timeout
               }
         );
