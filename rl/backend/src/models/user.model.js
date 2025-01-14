@@ -27,10 +27,8 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      unique: true,
       minlength: 8,
-      lowercase: true,
-      trim: true
+      select: false  // Make sure this is set to false for security reasons
     },
     phoneNo: {
       type: String,
@@ -60,13 +58,19 @@ const UserSchema = new mongoose.Schema(
 // before saving password hash(encrypt) the password.
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next()  // if password is not modified, then return next() to avoid hashing the password again.
-  this.password = await bcrypt.hash(this.password, 10)  // hash the password before saving to the database
-  next()
-})
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 //comparing the password for next login. checking if user enter the correct password.
-UserSchema.methods.isPassworrdCorrect = async function (password) {
-  return await bcrypt.compare(password, this.password)
-}
+UserSchema.methods.isPasswordCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password);
+  
+};
 
 // generateAccessToken that will be saved in db.
 UserSchema.methods.generateAccessToken = function () {

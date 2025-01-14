@@ -15,8 +15,8 @@ const validationSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters')
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-      'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character'
+       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]+$/,
+    'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character'
     )
     .required('Password is required'),
   phoneNo: Yup.string()
@@ -58,39 +58,54 @@ export default function SignupPage() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Mark all fields as touched
     const allTouched = FORM_FIELDS.reduce((acc, field) => ({
       ...acc,
       [field.name]: true
     }), {});
     setTouched(allTouched);
-
+  
     try {
-      // Validate the form data
       await validationSchema.validate(formData, { abortEarly: false });
-
-      // Submit the form data
-      await axios.post('http://localhost:8000/api/v1/restaurants/register', formData);
-
-      // Reset form fields after successful submission
+  
+      // Log the exact data being sent
+      console.log('Sending data:', formData);
+  
+      const response = await axios.post('http://localhost:8000/api/v1/restaurants/register', formData);
+      
+      // Log successful response
+      console.log('Server response:', response.data);
+  
       setFormData(createInitialState(FORM_FIELDS));
       setErrors({});
       setTouched({});
-
-      // Show success message
       toast.success('Form submitted successfully!');
+  
     } catch (err) {
+       // Display the error message to the user
+       if (err.response?.data?.message === 'Email already exists') {
+        setErrors('Email already exists. Please use a different email.');
+      } 
+
       if (err.name === 'ValidationError') {
-        // Handle validation errors
         const newErrors = {};
         err.inner.forEach((error) => {
           newErrors[error.path] = error.message;
         });
         setErrors(newErrors);
+        toast.error('Please fix the validation errors');
+      } else if (axios.isAxiosError(err)) {
+        // Enhanced Axios error handling
+        console.error('Server Error Details:', {
+          response: err.response?.data,
+          status: err.response?.status,
+          message: err.message
+        });
+        
+        const errorMessage = err.response?.data?.message || 'Form submission failed. Please try again.';
+        toast.error(errorMessage);
       } else {
-        // Handle API errors
-        console.error('Form submission failed:', err);
-        toast.error('Form submission failed. Please try again.');
+        console.error('Unexpected error:', err);
+        toast.error('An unexpected error occurred');
       }
     } finally {
       setIsSubmitting(false);

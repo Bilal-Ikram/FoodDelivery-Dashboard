@@ -1,6 +1,6 @@
 import { ApiError } from "../utils/ApiError.js";
 import aysncHandler from "../utils/asyncHandler.js";
-import { jwt } from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
 
 // it will verify if user exist or logged in or not
