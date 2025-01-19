@@ -21,7 +21,8 @@
     "jsonwebtoken": "^9.0.2",
     "kill-port": "^2.0.1",
     "mongoose": "^8.9.3",
-    "nodemailer": "^6.9.16"
+    "nodemailer": "^6.9.16",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",

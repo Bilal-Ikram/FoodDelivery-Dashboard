@@ -4,8 +4,8 @@
 import { Sidebar } from "flowbite-react";
 import { Link, Outlet } from "react-router-dom";
 
-
 export default function Component() {
+
   return (
     <div className="flex h-screen">
       {/* Sidebar - Fixed Width */}

@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './Layout.jsx'
 import { RouterProvider } from 'react-router-dom'
-import { createBrowserRouter } from'react-router-dom'
+import { createBrowserRouter  } from'react-router-dom'
 import Dashboard from './components/Dashboard/pages/DashBoard.jsx';
 import Orders from './components/Orders/pages/Orders.jsx';
 import Reports from './components/Reportsjsx/pages/Reports.jsx';
@@ -15,7 +15,7 @@ import UserManagement from './components/UserManagement/pages/UserManagement.jsx
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/:sessionId",
     element: <App />,
     // component: NotFound
     children: [

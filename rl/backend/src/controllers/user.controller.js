@@ -9,11 +9,12 @@ import { verifyJWT } from './../middlewares/auth.middleware.js';
 
 // Create new user
 // backend/controllers/restaurantController.js
-const generateAccessAndRefreshToken = async (userId) => {// Generate access and refresh tokens
+const generateAccessAndRefreshToken = async (userId) => {
+  // Generate access and refresh tokens
 
   try {
-    const user = await User.findById(userId)
-    const accessToken = user.generateAccessToken()
+    const user = await User.findById(userId);
+    const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
     console.log("Access Token:", accessToken); // Debugging
     console.log("Refresh Token:", refreshToken); // Debugging
@@ -29,15 +30,15 @@ const generateAccessAndRefreshToken = async (userId) => {// Generate access and 
 
 
 const registerRestaurant = asyncHandler(async (req, res) => {
-    // get user details from frontend
-    // validation - not empty
-    // check if user already exists: username, email
-    // check for images, check for avatar
-    // upload them to cloudinary, avatar
-    // create user object - create entry in db
-    // remove password and refresh token field from response
-    // check for user creation
-    // return res
+  // get user details from frontend
+  // validation - not empty
+  // check if user already exists: username, email
+  // check for images, check for avatar
+  // upload them to cloudinary, avatar
+  // create user object - create entry in db
+  // remove password and refresh token field from response
+  // check for user creation
+  // return res
   try {
     const { restaurantName, name, email, password, phoneNo, restaurantAddress } = req.body;
 
@@ -61,12 +62,14 @@ const registerRestaurant = asyncHandler(async (req, res) => {
       email,
       password,
       phoneNo,
-      restaurantAddress,
-      refreshToken: refreshToken
+      restaurantAddress
     });
 
     // Save the restaurant to the database
     await restaurant.save();
+
+    // Generate access and refresh tokens
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(restaurant._id);
 
     // Send an email to the admin
     const adminEmail = process.env.ADMIN_EMAIL || 'bilalik3210@gmail.com';
@@ -80,11 +83,11 @@ const registerRestaurant = asyncHandler(async (req, res) => {
 
 
     // Respond to the client
-    res.status(201).json(new ApiResponse(200, 'Registration successful. Await admin approval.')
+    return res.status(201).json(new ApiResponse(200, { accessToken, refreshToken },'Registration successful. Await admin approval.')
     );
   } catch (err) {
     console.error('Error registering restaurant:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -100,7 +103,7 @@ const loginUser = asyncHandler(async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log(email);
-    
+
     if (!email && !password) {
       throw new ApiError(400, 'Please provide email and password');
     }
@@ -125,11 +128,15 @@ const loginUser = asyncHandler(async (req, res) => {
       httpOnly: true,
       // secure: true
       domain: 'localhost', // Set the domain to localhost
-  path: '/' // Set the path to root
+      path: '/' // Set the path to root
     }
 
+
     console.log("Access Token before setting cookie:", accessToken); // Debugging
-console.log("Refresh Token before setting cookie:", refreshToken); // Debugging
+    console.log("Refresh Token before setting cookie:", refreshToken); // Debugging
+
+   
+    await user.save({ validateBeforeSave: false });
 
     return res
       .status(200)
@@ -144,10 +151,11 @@ console.log("Refresh Token before setting cookie:", refreshToken); // Debugging
           },
           'User Logged in successfully'
         )
-      );
+      )
+      // .redirect(`http://localhost:5174/${uniqueIdentifier}`);
   } catch (err) {
     console.error('Error logging in:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error during registration' });
   }
 });
 
@@ -167,14 +175,14 @@ const logoutUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     // secure: true
     domain: 'localhost', // Set the domain to localhost
-  path: '/' // Set the path to root
+    path: '/' // Set the path to root
   }
 
   return res
-   .status(200)
-   .clearCookie("accessToken", options)
-   .clearCookie("refreshToken", options)
-   .json(new ApiResponse(200, 'User logged out successfully'));
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, 'User logged out successfully'));
 
 });
 
@@ -187,42 +195,42 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     throw new ApiError(401, 'No refresh token provided');
   }
   // Verify the refresh token
- try {
-  const decodedToken=  verifyJWT(
-     incomingRefreshToken,
-     process.env.REFRESH_TOKEN_SECRET,
-   )
-  const user= await User.findById(decodedToken?._id)
-  if (!user) {
-     throw new ApiError(403, 'Unauthorized');
-   }
-   // matching 
-   if ( incomingRefreshToken !==user?.refreshToken) {
-     throw new ApiError(403, 'Refresh TOken is expored or used');
-   }
-   const options={
-     httpOnly: true,
-    //  secure: true
-    domain: 'localhost', // Set the domain to localhost
-  path: '/' // Set the path to root
-   }
- const {accessToken, newRefreshToken }=await generateAccessAndRefreshToken(user._id);
- return res
-    .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", newRefreshToken, options)
-    .json(
-       new ApiResponse(
-         200,
-         { accessToken, newRefreshToken },
-         'User refreshed successfully'
-       )
-     )
- } catch (error) {
-  throw new ApiError(401, error?.message || 
-     'Invalid refresh token or expired token'
-  )
- }
+  try {
+    const decodedToken = verifyJWT(
+      incomingRefreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+    )
+    const user = await User.findById(decodedToken?._id)
+    if (!user) {
+      throw new ApiError(403, 'Unauthorized');
+    }
+    // matching 
+    if (incomingRefreshToken !== user?.refreshToken) {
+      throw new ApiError(403, 'Refresh TOken is expored or used');
+    }
+    const options = {
+      httpOnly: true,
+      //  secure: true
+      domain: 'localhost', // Set the domain to localhost
+      path: '/' // Set the path to root
+    }
+    const { accessToken, newRefreshToken } = await generateAccessAndRefreshToken(user._id);
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", newRefreshToken, options)
+      .json(
+        new ApiResponse(
+          200,
+          { accessToken, newRefreshToken },
+          'User refreshed successfully'
+        )
+      )
+  } catch (error) {
+    throw new ApiError(401, error?.message ||
+      'Invalid refresh token or expired token'
+    )
+  }
 
 })
 

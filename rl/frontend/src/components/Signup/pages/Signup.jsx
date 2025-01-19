@@ -15,8 +15,8 @@ const validationSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters')
     .matches(
-       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]+$/,
-    'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character'
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]+$/,
+      'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character'
     )
     .required('Password is required'),
   phoneNo: Yup.string()
@@ -57,34 +57,39 @@ export default function SignupPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     const allTouched = FORM_FIELDS.reduce((acc, field) => ({
       ...acc,
       [field.name]: true
     }), {});
     setTouched(allTouched);
-  
+
     try {
       await validationSchema.validate(formData, { abortEarly: false });
-  
+
       // Log the exact data being sent
       console.log('Sending data:', formData);
-  
-      const response = await axios.post('http://localhost:8000/api/v1/restaurants/register', formData);
-      
+
+      const response = await axios.post('http://localhost:8000/api/v1/restaurants/register', formData, {
+        withCredentials: true, // Include cookies
+        headers: {
+          'Content-Type': 'application/json' // Ensure the correct content type
+        }
+      });
+
       // Log successful response
       console.log('Server response:', response.data);
-  
+
       setFormData(createInitialState(FORM_FIELDS));
       setErrors({});
       setTouched({});
       toast.success('Form submitted successfully!');
-  
+
     } catch (err) {
-       // Display the error message to the user
-       if (err.response?.data?.message === 'Email already exists') {
+      // Display the error message to the user
+      if (err.response?.data?.message === 'Email already exists') {
         setErrors('Email already exists. Please use a different email.');
-      } 
+      }
 
       if (err.name === 'ValidationError') {
         const newErrors = {};
@@ -94,16 +99,24 @@ export default function SignupPage() {
         setErrors(newErrors);
         toast.error('Please fix the validation errors');
       } else if (axios.isAxiosError(err)) {
-        // Enhanced Axios error handling
-        console.error('Server Error Details:', {
-          response: err.response?.data,
-          status: err.response?.status,
-          message: err.message
-        });
-        
-        const errorMessage = err.response?.data?.message || 'Form submission failed. Please try again.';
-        toast.error(errorMessage);
-      } else {
+        if (err.message === 'Network Error') {
+          toast.error('Unable to connect to the server. Please check your network or try again later.');
+        } else {
+          console.error('Server Error Details:', {
+            response: err.response?.data,
+            status: err.response?.status,
+            message: err.message,
+          });
+          const errorMessage = err.response?.data?.message || 'Registration failed. Please try again.';
+          toast.error(errorMessage);
+          console.error('Registration error:', {
+            status: err.response?.status,
+            data: err.response?.data,
+            message: err.message
+          });
+        }
+      }
+      else {
         console.error('Unexpected error:', err);
         toast.error('An unexpected error occurred');
       }

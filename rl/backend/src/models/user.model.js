@@ -37,7 +37,7 @@ const UserSchema = new mongoose.Schema(
     restaurantAddress: {
       type: String,
       minlength: 10,
-      maxlength: 50,
+      maxlength: 100,
       required: true
     },
     refreshToken: {
@@ -46,7 +46,7 @@ const UserSchema = new mongoose.Schema(
     isApproved: {
       type: Boolean,
       default: false
-    },
+    }
   },
   {
     timestamps: true
@@ -79,7 +79,7 @@ UserSchema.methods.generateAccessToken = function () {
 }
 
 //same as above code
-const refreshToken = UserSchema.methods.generateRefreshToken = function () {
+ UserSchema.methods.generateRefreshToken = function () {
 
   return jwt.sign(
     {
@@ -92,4 +92,3 @@ const refreshToken = UserSchema.methods.generateRefreshToken = function () {
   )
 }
 export const User = mongoose.model("User", UserSchema)
-export { refreshToken }

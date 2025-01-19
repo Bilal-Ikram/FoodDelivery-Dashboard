@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import InputField from '../InputField/InputField';
 import Button from '../Button/Button';
@@ -40,7 +41,7 @@ const LoginForm = () => {
       });
 
       const response = await axios.post(
-        'http://localhost:8000/api/v1/restaurants/login', 
+        'http://localhost:8000/api/v1/restaurants/login',
         formData,
         {
           headers: {
@@ -51,12 +52,16 @@ const LoginForm = () => {
       );
 
       console.log('Login response:', response.data);
-      
+
       if (response.data.success) {
         // Add success message
         console.log('Login successful');
-        // Redirect to dashboard
-        // window.location.href = '/dashboard';
+
+        // Generate a UUID for the session
+      const sessionId = uuidv4();
+
+      // Redirect to the dashboard application with the UUID in the URL
+      window.location.href = `http://localhost:5175/${sessionId}`;
       } else {
         setErrors(prev => ({
           ...prev,
@@ -65,10 +70,10 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.error('Login error:', error);
-      const errorMessage = error?.response?.data?.message || 
-                          error?.message || 
-                          'An error occurred during login';
-      
+      const errorMessage = error?.response?.data?.message ||
+        error?.message ||
+        'An error occurred during login';
+
       setErrors(prev => ({
         ...prev,
         submit: errorMessage
@@ -92,8 +97,8 @@ const LoginForm = () => {
         name="email"
         value={formData.email}
         onChange={(e) => {
-          setFormData({...formData, email: e.target.value.trim()});
-          if (errors.email) setErrors({...errors, email: ''});
+          setFormData({ ...formData, email: e.target.value.trim() });
+          if (errors.email) setErrors({ ...errors, email: '' });
         }}
         onFocus={() => setFocusedInput('email')}
         onBlur={() => setFocusedInput('')}
@@ -109,8 +114,8 @@ const LoginForm = () => {
         name="password"
         value={formData.password}
         onChange={(e) => {
-          setFormData({...formData, password: e.target.value});
-          if (errors.password) setErrors({...errors, password: ''});
+          setFormData({ ...formData, password: e.target.value });
+          if (errors.password) setErrors({ ...errors, password: '' });
         }}
         onFocus={() => setFocusedInput('password')}
         onBlur={() => setFocusedInput('')}
@@ -131,16 +136,16 @@ const LoginForm = () => {
       />
 
       <div className="flex justify-end">
-        <a 
-          href="#" 
+        <a
+          href="#"
           className="text-pink-500 hover:text-pink-600 transition-colors duration-200 text-sm"
         >
           Forgot password?
         </a>
       </div>
 
-      <Button 
-        type="submit" 
+      <Button
+        type="submit"
         variant="primary"
         disabled={isLoading}
       >
@@ -151,18 +156,18 @@ const LoginForm = () => {
         <p className="text-gray-600">OR</p>
       </div>
 
-      <Button 
+      <Button
         variant="secondary"
         disabled={isLoading}
-        onClick={() => {/* Add phone login logic */}}
+        onClick={() => {/* Add phone login logic */ }}
       >
         Log in with phone number
       </Button>
 
       <div className="text-center text-gray-600">
         No account?{' '}
-        <a 
-          href="#" 
+        <a
+          href="#"
           className="text-pink-500 hover:text-pink-600 transition-colors duration-200"
         >
           Partner with Foodpanda
