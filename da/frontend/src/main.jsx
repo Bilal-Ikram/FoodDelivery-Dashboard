@@ -15,19 +15,18 @@ import UserManagement from './components/UserManagement/pages/UserManagement.jsx
 
 const router = createBrowserRouter([
   {
-    path: "/:sessionId",
+    path: "/dashboard/:sessionId",
     element: <App />,
     // component: NotFound
     children: [
-      { index: true, element: <Dashboard />  },
-      { path: "/DashBoard", element: <Dashboard /> },
-      { path: "/Orders", element: <Orders /> },
-      { path: "/Reports", element: <Reports /> },
-      { path: "/Invoices", element: <Invoices /> },
-      { path: "/MenuManagement", element: <MenuManagement /> },
-      { path: "/Openingtime", element: <OpeningTime /> },
-      { path: "/UserManagement", element: <UserManagement /> },
-      { path: "/Support", element: <Support /> }
+      { index: true, element: <Dashboard /> },
+      { path: "orders", element: <Orders /> },
+      { path: "reports", element: <Reports /> },
+      { path: "invoices", element: <Invoices /> },
+      { path: "menu-management", element: <MenuManagement /> },
+      { path: "opening-time", element: <OpeningTime /> },
+      { path: "user-management", element: <UserManagement /> },
+      { path: "support", element: <Support /> }
       // { path: "*", element: <NotFound /> },
     ]
   },

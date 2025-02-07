@@ -1,4 +1,3 @@
-import React from 'react';
 import { BarChart, Volume2, Settings } from 'lucide-react';
 import Logo from '../components/Logo/Logo';
 import RestaurantIllustration from '../components/RestaurantIllustration/RestaurantIllustration';
@@ -32,7 +31,7 @@ const LoginPage = () => {
       text:  (
         <>
           <span className="block">Manage your menu and opening</span>
-          <span className="block">times more easily, so they're always</span>
+          <span className="block">times more easily, so they are always</span>
           <span className="block">up to date.</span>
         </>
       )
