@@ -12,7 +12,6 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
         </Routes>{" "}
         {/* End Routes */} {/* End Router */} {/* End App */}
-        {/* Add more routes as needed */}
       </Router>
     </>
   );
