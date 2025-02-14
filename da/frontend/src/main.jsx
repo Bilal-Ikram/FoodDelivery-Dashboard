@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { MantineProvider } from '@mantine/core'; // Import MantineProvider
 import './index.css'
 import App from './Layout.jsx'
 import { RouterProvider } from 'react-router-dom'
@@ -35,6 +36,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
-  </StrictMode>,
-)
+    <MantineProvider theme={{ colorScheme: 'light' }} withGlobalStyles withNormalizeCSS>
+      <RouterProvider router={router} />
+    </MantineProvider>
+  </StrictMode>
+);
