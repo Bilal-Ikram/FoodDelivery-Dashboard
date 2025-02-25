@@ -3,15 +3,19 @@
     "version": "1.0.0",
     "description": "Restaurant System with Register-Login and Dashboard",
     "scripts": {
-      "rl": "concurrently \"npm run rl-backend\" \"npm run rl-frontend\"",
-      "rl-backend": "cd rl/backend && npm run dev",
-      "rl-frontend": "cd rl/frontend && npm run dev",
-      "da": "cd da/frontend && npm run dev", 
-      "install-all": "concurrently \"npm run install-rs\" \"npm run install-da\"",
-      "install-rs": "concurrently \"cd rl/backend && npm install\" \"cd rl/frontend && npm install\"",
-      "install-da": "cd da/frontend && npm install"
+        "rl": "concurrently \"npm run rl-backend\" \"npm run rl-frontend\"",
+        "rl-backend": "cd rl/backend && npm run dev",
+        "rl-frontend": "cd rl/frontend && npm run dev",
+        "da": "cd da/frontend && npm run dev",
+        "install-all": "concurrently \"npm run install-rs\" \"npm run install-da\"",
+        "install-rs": "concurrently \"cd rl/backend && npm install\" \"cd rl/frontend && npm install\"",
+        "install-da": "cd da/frontend && npm install"
     },
     "devDependencies": {
-      "concurrently": "^9.1.2"
+        "@types/node": "^22.13.4",
+        "@types/react": "^19.0.10",
+        "@types/react-dom": "^19.0.4",
+        "concurrently": "^9.1.2",
+        "typescript": "^5.7.3"
     }
-  }
+}

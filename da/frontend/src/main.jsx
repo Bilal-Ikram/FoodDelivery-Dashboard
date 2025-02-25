@@ -2,6 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { MantineProvider } from '@mantine/core'; // Import MantineProvider
 import './index.css'
+import '@mantine/core/styles.css';
+import '@mantine/dropzone/styles.css';
 import App from './Layout.jsx'
 import { RouterProvider } from 'react-router-dom'
 import { createBrowserRouter  } from'react-router-dom'
