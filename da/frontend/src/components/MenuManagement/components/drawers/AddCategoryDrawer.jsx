@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { ArrowLeft } from 'lucide-react';
+
 
 const CategoryDrawer = ({ opened, onClose, onSave }) => {
   const [formData, setFormData] = useState({
@@ -24,11 +26,18 @@ const CategoryDrawer = ({ opened, onClose, onSave }) => {
 
   const handleSaveDraft = () => {
     sessionStorage.setItem('categoryDraft', JSON.stringify(formData));
+    onClose();
   };
 
-  const handleSave = () => {
+  const handleSave = () => {     /// ADD  API LOGIC HERE
     onSave(formData);
     sessionStorage.removeItem('categoryDraft');
+    //Reset the form
+    setFormData({
+      categoryName: '',
+      categoryType: '',
+      description: ''
+    });
     onClose();
   };
 
@@ -37,13 +46,14 @@ const CategoryDrawer = ({ opened, onClose, onSave }) => {
   if (!opened) return null;
 
   return (
-    <div className="fixed top-0 right-0 h-screen w-1/3 bg-white shadow-lg rounded-l-xl overflow-hidden">
+    <div className="fixed right-1 top-2 h-[calc(100vh-20px)] w-[500px] bg-neutral-100 shadow-2xl flex flex-col rounded-xl border border-gray-100 overflow-hidden">
       {/* Header Section */}
-      <div className="bg-violet-950 p-4 flex items-center justify-between">
-        <button onClick={onClose} className="text-white">
-          ←
+      <div className="bg-slate-800 p-4 flex items-center "> 
+        <button onClick={onClose} className="text-white flex items-center">
+        <ArrowLeft />
+          <h2 className="text-white text-lg font-medium ml-2">Add Category</h2>
         </button>
-        <h2 className="text-white text-lg font-medium">Add Category</h2>
+        <div className="flex-grow"></div> {/* This will push the buttons to the right */}
         <div className="flex gap-2">
           <button
             onClick={handleSaveDraft}
@@ -63,9 +73,11 @@ const CategoryDrawer = ({ opened, onClose, onSave }) => {
       </div>
 
       {/* Form Section - All inputs use handleInputChange */}
-      <div className="p-6 bg-white h-[calc(100vh-4rem)] overflow-y-auto">
+      {/* <div className='bg-neutral-200 min-w-full'></div> */}
+      <div className="p-6 bg-white h-[calc(100vh-rem)] overflow-y-auto mt-6 rounded-md">
         <div className="space-y-6">
           <div>
+            <h2 className="text-xl font-semibold text-black pb-4">Category Details</h2>
             <label className="block text-sm font-medium mb-1">
               Category Name *
               <input

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDown, UtensilsCrossed, Logs } from "lucide-react";
-import AddItemDrawer from "./drawers/AddItemDrawer";
+import {ItemDrawer} from "./drawers/ItemDrawer";
 import CategoryDrawer from './drawers/AddCategoryDrawer';
 
 const MenuHeader = () => {
@@ -61,7 +61,10 @@ const MenuHeader = () => {
       </div>
 
       {/* Drawers */}
-      <AddItemDrawer opened={drawerType === "item"} close={closeDrawer} />
+      <ItemDrawer opened={drawerType === "item"} onClose={closeDrawer} OnSave={(data) => {
+        // Add your API call here
+        console.log("Saving Item:", data);
+      }}  />
       <CategoryDrawer
         opened={drawerType === "category"}
         onClose={closeDrawer}
