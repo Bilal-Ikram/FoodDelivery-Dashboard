@@ -55,11 +55,11 @@ export const PriceVariationSection = ({ variations, onChange }) => {
                   type="number"
                   value={variation.price}
                   onChange={(e) => handleChange(variation.id, 'price', e.target.value)}
-                  className="w-full p-3 bg-gray-50 rounded-lg border border-gray-200 pr-12 focus:outline-none focus:ring-1 focus:ring-gray-800 focus:border-gray-800"
+                  className="w-full p-[14px] bg-gray-50 rounded-lg border border-gray-200 pr-12 focus:outline-none focus:ring-1 focus:ring-gray-800 focus:border-gray-800"
                   placeholder=" "
                 />
                 <label className={`absolute left-3 transition-all pointer-events-none ${
-                  variation.price ? 'top-1 text-xs text-gray-500' : 'top-4 text-gray-400'
+                  variation.price ? 'top-0 text-xs text-gray-500' : 'top-3 text-gray-400'
                 }`}>
                   Price
                 </label>
@@ -91,11 +91,11 @@ const VariationInput = ({ label, value, onChange }) => {
         onChange={onChange}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className="w-full p-3 bg-gray-100 rounded-lg border border-gray-200"
+        className="w-full p-[14px] bg-gray-100 rounded-lg border border-gray-200"
         placeholder=" "
       />
       <label className={`absolute left-3 transition-all pointer-events-none ${
-        isFocused || value ? 'top-2 text-xs text-gray-500' : 'top-3 text-gray-400'
+        isFocused || value ? 'top-0 text-xs text-gray-500' : 'top-3 text-gray-400'
       }`}>
         {label}
       </label>
