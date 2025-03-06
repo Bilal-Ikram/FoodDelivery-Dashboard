@@ -1,8 +1,6 @@
-// PriceVariationSection.jsx
 import { useState, useEffect } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import PropTypes from 'prop-types';
-
 
 export const PriceVariationSection = ({ variations, onChange }) => {
   const [localVariations, setLocalVariations] = useState(variations || []);
@@ -26,7 +24,7 @@ export const PriceVariationSection = ({ variations, onChange }) => {
   };
 
   return (
-    <div className="space-y-6 p-4 bg-white mt-6">
+    <div className="space-y-6 p-4 bg-white mt-6 pb-8">
       <div className="space-y-2">
         <h3 className=" text-xl font-semibold text-slate-800">Price and Variations</h3>
         <p className="text-sm font-medium text-gray-400">
@@ -35,19 +33,19 @@ export const PriceVariationSection = ({ variations, onChange }) => {
         </p>
       </div>
 
-      <div className="space-y-4 ">
+      <div className="space-y-4">
         {localVariations.map((variation) => (
           <div key={variation.id} className="relative p-4 border border-gray-200 rounded-lg">
             <button
               onClick={() => removeVariation(variation.id)}
               className="absolute top-2 right-2 p-1 text-gray-400 hover:text-red-500"
             >
-              <Trash2 className="w-4 h-4 " />
+              <Trash2 className="w-4 h-4" />
             </button>
 
-            <div className="space-y-4 ">
+            <div className="space-y-4 mt-5">
               <VariationInput
-                label="Variation Name"
+                label="Variation Name (e.g. Regular)"
                 value={variation.name}
                 onChange={(e) => handleChange(variation.id, 'name', e.target.value)}
               />
@@ -57,13 +55,15 @@ export const PriceVariationSection = ({ variations, onChange }) => {
                   type="number"
                   value={variation.price}
                   onChange={(e) => handleChange(variation.id, 'price', e.target.value)}
-                  className="w-full p-3 bg-gray-50 rounded-lg border border-gray-200 pr-12"
+                  className="w-full p-3 bg-gray-50 rounded-lg border border-gray-200 pr-12 focus:outline-none focus:ring-1 focus:ring-gray-800 focus:border-gray-800"
                   placeholder=" "
                 />
-                <label className="absolute left-3 top-3 text-gray-400 transition-all pointer-events-none">
+                <label className={`absolute left-3 transition-all pointer-events-none ${
+                  variation.price ? 'top-1 text-xs text-gray-500' : 'top-4 text-gray-400'
+                }`}>
                   Price
                 </label>
-                <span className="absolute right-3 top-3 text-gray-500">SGD</span>
+                <span className="absolute right-3 top-3 text-gray-500">PKR</span>
               </div>
             </div>
           </div>
@@ -102,24 +102,20 @@ const VariationInput = ({ label, value, onChange }) => {
     </div>
   );
 };
+
 PriceVariationSection.propTypes = {
-    variations: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-        name: PropTypes.string.isRequired,
-        price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
-      })
-    ).isRequired,
-    onChange: PropTypes.func.isRequired
-  };
-  
-  VariationInput.propTypes = {
-    label: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    onChange: PropTypes.func.isRequired
-  };
-  
-//   // Fix the useEffect dependency
-//   useEffect(() => {
-//     onChange(localVariations);
-//   }, [localVariations, onChange]); // Add onChange to dependencies
+  variations: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      name: PropTypes.string.isRequired,
+      price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    })
+  ).isRequired,
+  onChange: PropTypes.func.isRequired
+};
+
+VariationInput.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  onChange: PropTypes.func.isRequired
+};
