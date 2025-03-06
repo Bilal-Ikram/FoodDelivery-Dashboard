@@ -6,7 +6,9 @@ export default {
     flowbite.content(),
   ],
   theme: {
-    extend: {},
+    extend: {
+      scrollbar: ['rounded'],
+    },
   },
   plugins: [
     flowbite.plugin(),

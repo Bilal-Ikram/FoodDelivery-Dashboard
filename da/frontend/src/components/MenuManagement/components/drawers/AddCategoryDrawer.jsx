@@ -116,7 +116,7 @@ const CategoryDrawer = ({ opened, onClose, onSave }) => {
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-                className="mt-1 p-2 w-full bg-neutral-100 rounded border border-gray-300 h-24"
+                className="mt-1 p-2 w-full bg-neutral-100 rounded border border-gray-300 h-24 "
               />
             </label>
           </div>
