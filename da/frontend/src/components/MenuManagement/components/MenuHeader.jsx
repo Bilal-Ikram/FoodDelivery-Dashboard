@@ -7,6 +7,8 @@ import { MenuCategoryList } from "./MenuCategoryList";
 const MenuHeader = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [drawerType, setDrawerType] = useState(null);
+  const [editingItem, setEditingItem] = useState(null);
+
   
   // Initialize state from localStorage
   const [categories, setCategories] = useState(() => {
@@ -32,6 +34,18 @@ const MenuHeader = () => {
   const handleMouseLeave = () => setTimeout(() => setIsDropdownOpen(false), 1000);
   const closeDrawer = () => setDrawerType(null);
 
+  const handleDeleteItem = (itemId) => {
+    setItems(prev => prev.filter(item => item.id !== itemId));
+  };
+
+  const handleEditItem = (item) => {
+    // Implement your edit logic here
+    setEditingItem(item);
+    setDrawerType("item");
+
+    console.log("Editing item:", item);
+  };
+
   const handleSaveCategory = (categoryData) => {
     const newCategory = {
       id: Date.now().toString(),
@@ -47,17 +61,26 @@ const MenuHeader = () => {
   };
 
   const handleSaveItem = (itemData) => {
-    const newItem = {
-      id: Date.now().toString(),
-      ...itemData,
-      createdAt: new Date().toISOString()
-    };
-    
     setItems(prev => {
-      const updated = [...prev, newItem];
-      localStorage.setItem("items", JSON.stringify(updated));
-      return updated;
+      let updatedItems;
+      if (itemData.id) {
+        // Update existing item
+        updatedItems = prev.map(item => 
+          item.id === itemData.id ? { ...itemData } : item
+        );
+      } else {
+        // Add new item
+        const newItem = {
+          id: Date.now().toString(),
+          ...itemData,
+          createdAt: new Date().toISOString()
+        };
+        updatedItems = [...prev, newItem];
+      }
+      localStorage.setItem("items", JSON.stringify(updatedItems));
+      return updatedItems;
     });
+    setEditingItem(null);
   };
 
   return (
@@ -93,13 +116,19 @@ const MenuHeader = () => {
         categories={categories} 
         items={items} 
         onAddItem={() => setDrawerType("item")}
+        onEditItem={handleEditItem}
+        onDeleteItem={handleDeleteItem}
       />
 
       <ItemDrawer 
         opened={drawerType === "item"} 
-        onClose={closeDrawer}
+        onClose={() => {
+          setDrawerType(null);
+          setEditingItem(null);
+        }}
         onSave={handleSaveItem}
         categories={categories}
+        initialData={editingItem} // Pass the item to edit
       />
       
       <CategoryDrawer

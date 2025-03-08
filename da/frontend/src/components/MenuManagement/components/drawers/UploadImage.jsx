@@ -13,7 +13,7 @@ export const UploadImage = ({ onFileSelect }) => {
       // Validate file type
       if (!file.type.startsWith('image/')) {
         alert('Please upload an image file (PNG, JPG, JPEG etc.)');
-        e.target.value = ''; // Clear the input
+        e.target.value = ''; // Clear the inputf
         return;
       };
       

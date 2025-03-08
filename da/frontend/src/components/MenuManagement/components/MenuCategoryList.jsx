@@ -62,14 +62,14 @@ export const MenuCategoryList = ({ categories, items, onAddItem }) => {
                           )}
                           <div className="flex-1">
                             <h3 className="font-semibold">{item.itemName}</h3>
-                            <p className="text-sm text-gray-600 mt-1">
+                            <p className="text-sm text-gray-600 mt-1 text-wrap">
                               {item.description}
                             </p>
                             <div className="mt-2">
                               <span className="font-medium">
                                 {item.variations?.length > 0 
-                                  ? `From SGD ${Math.min(...item.variations.map(v => v.price))}`
-                                  : `SGD ${item.price}`}
+                                  ? `From PKR ${Math.min(...item.variations.map(v => v.price))}`
+                                  : `PKR ${item.price}`}
                               </span>
                             </div>
                           </div>
@@ -106,4 +106,5 @@ MenuCategoryList.propTypes = {
     })
   ).isRequired,
   onAddItem: PropTypes.func.isRequired,
+  onEditItem: PropTypes.func.isRequired,
 };

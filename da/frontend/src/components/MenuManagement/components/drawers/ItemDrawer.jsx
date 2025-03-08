@@ -6,7 +6,7 @@ import { CategoryField } from "./CategoryField";
 import { UploadImage } from "./UploadImage";
 import { PriceVariationSection } from "./PriceVariationSection";
 
-export const ItemDrawer = ({ opened, onClose, onSave, categories }) => {
+export const ItemDrawer = ({ opened, onClose, onSave, categories, initialData }) => {
   const [formData, setFormData] = useState({
     itemName: "",
     description: "",
@@ -23,6 +23,30 @@ export const ItemDrawer = ({ opened, onClose, onSave, categories }) => {
       if (draft) setFormData(JSON.parse(draft));
     }
   }, [opened]);
+
+    // Initialize form with existing data when editing
+    useEffect(() => {
+      if (opened && initialData) {
+        setFormData({
+          itemName: initialData.itemName || "",
+          description: initialData.description || "",
+          category: initialData.category || "",
+          image: initialData.image || null,
+          variations: initialData.variations || [],
+          id: initialData.id // Keep existing ID
+        });
+      } else if (!opened) {
+        // Reset form when closing
+        setFormData({
+          itemName: "",
+          description: "",
+          category: "",
+          image: null,
+          variations: [],
+          id: null
+        });
+      }
+    }, [opened, initialData]);
 
   useEffect(() => {
     const isValid =
@@ -180,6 +204,11 @@ ItemDrawer.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
+
+ItemDrawer.propTypes = {
+  initialData: PropTypes.object
+};
+
 
 // Add default props for ItemDrawer
 ItemDrawer.defaultProps = {
