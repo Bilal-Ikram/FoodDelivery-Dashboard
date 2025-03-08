@@ -6,7 +6,7 @@ import { CategoryField } from "./CategoryField";
 import { UploadImage } from "./UploadImage";
 import { PriceVariationSection } from "./PriceVariationSection";
 
-export const ItemDrawer = ({ opened, onClose, onSave }) => {
+export const ItemDrawer = ({ opened, onClose, onSave, categories }) => {
   const [formData, setFormData] = useState({
     itemName: "",
     description: "",
@@ -25,12 +25,14 @@ export const ItemDrawer = ({ opened, onClose, onSave }) => {
   }, [opened]);
 
   useEffect(() => {
-    setIsFormValid(
+    const isValid =
       !!formData.itemName.trim() &&
-        !!formData.category &&
-        !!formData.image &&
-        !!formData.price
-    );
+      !!formData.category &&
+      !!formData.image &&
+      formData.variations.length > 0 &&
+      formData.variations.every((v) => v.name && v.price);
+
+    setIsFormValid(isValid);
   }, [formData]);
 
   const handleSaveDraft = () => {
@@ -39,14 +41,22 @@ export const ItemDrawer = ({ opened, onClose, onSave }) => {
   };
 
   const handlePublish = () => {
-    onSave(formData);
+    // Format data before saving
+    const itemData = {
+      ...formData,
+      variations: formData.variations.map((v) => ({
+        ...v,
+        price: parseFloat(v.price),
+      })),
+    };
+    onSave(itemData);
     sessionStorage.removeItem("draftItem");
     setFormData({
       itemName: "",
       description: "",
       category: "",
       image: null,
-      price: "",
+      variations: [],
     });
     onClose();
   };
@@ -114,7 +124,9 @@ export const ItemDrawer = ({ opened, onClose, onSave }) => {
               Item Details
             </h3>
             <UploadImage
-              onFileSelect={(file) => setFormData({ ...formData, image: file })}
+              onFileSelect={(file) =>
+                setFormData((prev) => ({ ...prev, image: file }))
+              }
             />
 
             <InputField
@@ -143,6 +155,7 @@ export const ItemDrawer = ({ opened, onClose, onSave }) => {
               onChange={(e) =>
                 setFormData({ ...formData, category: e.target.value })
               }
+              categories={categories}
             />
           </div>
           {/* Price Variation Section */}
@@ -157,7 +170,18 @@ export const ItemDrawer = ({ opened, onClose, onSave }) => {
 };
 
 ItemDrawer.propTypes = {
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ),
   opened: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+};
+
+// Add default props for ItemDrawer
+ItemDrawer.defaultProps = {
+  categories: [],
 };

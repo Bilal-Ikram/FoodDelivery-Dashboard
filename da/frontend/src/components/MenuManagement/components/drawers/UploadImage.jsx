@@ -15,7 +15,8 @@ export const UploadImage = ({ onFileSelect }) => {
         alert('Please upload an image file (PNG, JPG, JPEG etc.)');
         e.target.value = ''; // Clear the input
         return;
-      }
+      };
+      
 
       const reader = new FileReader();
       reader.onloadend = () => {

@@ -5,9 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 
 const CategoryDrawer = ({ opened, onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    categoryName: '',
-    categoryType: '',
-    description: ''
+    categoryName: ''
   });
 
   // Load draft when drawer opens
@@ -41,7 +39,7 @@ const CategoryDrawer = ({ opened, onClose, onSave }) => {
     onClose();
   };
 
-  const isFormValid = formData.categoryName && formData.categoryType;
+  const isFormValid = formData.categoryName ;
 
   if (!opened) return null;
 
@@ -92,13 +90,13 @@ const CategoryDrawer = ({ opened, onClose, onSave }) => {
 
           <div>
             <label className="block text-sm font-medium mb-1">
-              Category Type *
+              Category Type 
               <select
                 name="categoryType"
                 value={formData.categoryType}
                 onChange={handleInputChange}
                 className="mt-1 p-2 w-full bg-neutral-100 rounded border border-gray-300"
-                required
+                
               >
                 <option value="">Select Type</option>
                 <option value="Small Mains">Small Mains</option>
