@@ -9,12 +9,23 @@ const MenuSchema = new mongoose.Schema(
       match: /^[a-zA-Z\s]+$/,
       minlength: 3,
       maxlength: 20,
-      trim: true
+      trim: true,
     },
-    price: {
-      type: Number,
-      required: true
-    },
+    variations: [{
+      size: {
+        type: String,
+        required: true,
+        lowercase: true,
+        match: /^[a-zA-Z\s]+$/,
+        trim: true,
+        minlength: 3,
+        maxlength: 20
+      },
+      price: {
+        type: Number,
+        required: true
+      }
+    }],
     category: {
       type: String,
       required: true,
@@ -22,21 +33,26 @@ const MenuSchema = new mongoose.Schema(
       match: /^[a-zA-Z\s]+$/,
       minlength: 3,
       maxlength: 20,
-      trim: true
+      trim: true,
     },
     description: {
       type: String,
       required: true,
       maxlength: 100,
-      trim: true
+      trim: true,
     },
     image: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
+    restaurantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
