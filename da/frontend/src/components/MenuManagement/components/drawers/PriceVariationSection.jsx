@@ -10,7 +10,7 @@ export const PriceVariationSection = ({ variations, onChange }) => {
   }, [localVariations]);
 
   const addVariation = () => {
-    setLocalVariations([...localVariations, { id: Date.now(), name: '', price: '' }]);
+    setLocalVariations([...localVariations, { id: Date.now(), size: '', price: '' }]);
   };
 
   const removeVariation = (id) => {
@@ -18,10 +18,28 @@ export const PriceVariationSection = ({ variations, onChange }) => {
   };
 
   const handleChange = (id, field, value) => {
+    // Prevent empty variation price
+    if (field === 'price') {
+      // Prevent negative values
+      value = Math.max(0, parseFloat(value) || 0);
+    }
+    
+    if (field === 'size') {
+      // Remove special characters
+      value = value.replace(/[^a-zA-Z\s]/g, '');
+    }
+
     setLocalVariations(localVariations.map(v => 
       v.id === id ? { ...v, [field]: value } : v
     ));
   };
+
+//   // Handle Enter key for quick adding
+// const handleKeyPress = (e) => {
+//   if (e.key === 'Enter') {
+//     addVariation();
+//   }
+// };
 
   return (
     <div className="space-y-6 p-4 bg-white mt-6 pb-8">
@@ -46,8 +64,8 @@ export const PriceVariationSection = ({ variations, onChange }) => {
             <div className="space-y-4 mt-5">
               <VariationInput
                 label="Variation Name (e.g. Regular)"
-                value={variation.name}
-                onChange={(e) => handleChange(variation.id, 'name', e.target.value)}
+                value={variation.size}
+                onChange={(e) => handleChange(variation.id, 'size', e.target.value)}
               />
               
               <div className="relative">
@@ -107,7 +125,7 @@ PriceVariationSection.propTypes = {
   variations: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      name: PropTypes.string.isRequired,
+      size: PropTypes.string.isRequired,
       price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
     })
   ).isRequired,
