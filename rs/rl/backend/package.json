@@ -21,7 +21,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "kill-port": "^2.0.1",
-    "mongoose": "^8.9.3",
+    "mongoose": "^8.12.1",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.16",
     "uuid": "^11.0.5"

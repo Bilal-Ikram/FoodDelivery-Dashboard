@@ -10,7 +10,7 @@ import FormField from '../components/FormField';
 // Validation schema
 const validationSchema = Yup.object().shape({
   restaurantName: Yup.string().required('Restaurant Name is required'),
-  name: Yup.string().required('Name is required'),
+  fullName: Yup.string().required('Name is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters')
@@ -19,10 +19,10 @@ const validationSchema = Yup.object().shape({
       'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character'
     )
     .required('Password is required'),
-  phoneNo: Yup.string()
+  phone: Yup.string()
     .matches(/^\d{11}$/, 'Phone number must be 11 digits')
     .required('Phone number is required'),
-  restaurantAddress: Yup.string().required('Restaurant Address is required'),
+  address: Yup.string().required('Restaurant Address is required'),
 });
 
 export default function SignupPage() {
