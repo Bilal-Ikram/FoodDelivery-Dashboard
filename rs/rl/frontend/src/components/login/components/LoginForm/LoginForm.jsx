@@ -55,9 +55,20 @@ const LoginForm = () => {
       if (response.data.success) {
         // Add success message
         console.log("Login successful");
+        // Add null-checking
+        const restaurantId =
+          response.data.user?.restaurant?._id || response.data.user?.restaurant;
+
+        if (!restaurantId) {
+          console.error("No restaurant ID found");
+          setErrors({ submit: "Restaurant configuration missing" });
+          return;
+        }
+        console.log("Restaurant data:", response.data.user.restaurant);
+        console.log("Extracted ID:", response.data.user.restaurant._id);
 
         // Get REAL restaurant ID from API response
-        const { restaurantId } = response.data;
+        // const  restaurantId  = response.data.user.restaurant._id;
 
         // Store in context/local storage
         localStorage.setItem("restaurantId", restaurantId);

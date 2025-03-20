@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 const UserSchema = new mongoose.Schema(
   {
-    restaurantId: {
+    restaurant: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Restaurant',
       required: true,
@@ -65,7 +65,7 @@ UserSchema.methods.generateAccessToken = function () {
     {
       _id: this._id,
       email: this.email,
-      restaurantId: this.restaurantId,
+      restaurantId: this.restaurant._id,
       role: this.role
     },
     process.env.ACCESS_TOKEN_SECRET,

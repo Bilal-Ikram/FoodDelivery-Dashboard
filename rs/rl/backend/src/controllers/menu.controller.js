@@ -30,7 +30,7 @@ const createMenu = asyncHandler(async (req, res) => {
     }
 
     // Verify restaurant ID matches logged-in user
-    if (req.params.restaurantId !== req.user.restaurantId.toString()) {
+    if (req.params.restaurantId !== req.user.restaurant.toString()) {
       throw new ApiError(403, "Unauthorized restaurant access");
     }
 
@@ -56,7 +56,7 @@ const createMenu = asyncHandler(async (req, res) => {
         url: cloudinaryResponse.secure_url,
         public_id: cloudinaryResponse.public_id,
       },
-      restaurantId: req.user._id,
+      restaurantId: req.user.restaurant,
     });
     await menu.save();
 

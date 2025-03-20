@@ -139,7 +139,7 @@ const registerRestaurant = asyncHandler(async (req, res) => {
 
     // Step 2: Create User with restaurantId
     const user = await User.create({
-      restaurantId: restaurant._id, // Link to the new restaurant
+      restaurant: restaurant._id, // Link to the new restaurant
       fullName: req.body.fullName,
       email: req.body.email,
       password: req.body.password,
@@ -154,7 +154,7 @@ const registerRestaurant = asyncHandler(async (req, res) => {
     // Send an email to the admin
     const adminEmail = process.env.ADMIN_EMAIL || "bilalik3210@gmail.com";
     const subject = "New Restaurant Registration";
-    const text = `A new restaurant has registered:\n\nRestaurant Name: ${restaurantName}\nName: ${name}\nEmail: ${email}\nPhone: ${phoneNo}\nAddress: ${restaurantAddress}`;
+    const text = `A new restaurant has registered:\n\nRestaurant Name: ${restaurantName}\nName: ${fullName}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address}`;
     console.log("Sending email to admin:", adminEmail); // Log the admin email
     console.log("Email subject:", subject); // Log the email subject
     console.log("Email content:", text); // Log the email content
@@ -235,11 +235,10 @@ const loginUser = asyncHandler(async (req, res) => {
           {
             user: {
               _id: user._id,
-              name: user.name,
+              name: user.fullName,
               email: user.email,
               role: user.role,
               restaurant: user.restaurant,
-              restaurantId: user.restaurantId,
             },
             accessToken,
             refreshToken,

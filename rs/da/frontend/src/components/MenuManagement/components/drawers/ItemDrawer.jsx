@@ -104,8 +104,7 @@ export const ItemDrawer = ({
       image: null,
       variations: [],
     });
-    onClose();
-
+    
     // SAVE THE ITEM TO THE BACKEND API //////////////////
     try {
       const formDataToSend = new FormData();

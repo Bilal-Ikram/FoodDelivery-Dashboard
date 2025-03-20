@@ -48,7 +48,7 @@ const MenuSchema = new mongoose.Schema(
     },
     restaurantId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Restaurant",
       required: true,
     },
   },
