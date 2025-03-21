@@ -136,6 +136,8 @@ const registerRestaurant = asyncHandler(async (req, res) => {
       address: req.body.address,
       phone: req.body.phone,
     });
+    // Add validation after restaurant creation
+    if (!restaurant) throw new ApiError(500, "Restaurant creation failed");
 
     // Step 2: Create User with restaurantId
     const user = await User.create({
@@ -145,6 +147,9 @@ const registerRestaurant = asyncHandler(async (req, res) => {
       password: req.body.password,
       role: "owner",
     });
+    // Add validation after user creation
+    if (!user?.restaurant)
+      throw new ApiError(500, "User-restaurant link failed");
 
     // Generate access and refresh tokens
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
@@ -193,7 +198,12 @@ const loginUser = asyncHandler(async (req, res) => {
       throw new ApiError(400, "Please provide email and password");
     }
 
-    const user = await User.findOne({ email }).populate("restaurant");
+    const user = await User.findOne({ email })
+      .populate({
+        path: "restaurant",
+        select: "_id", // 👈 Explicitly select only the ID
+      })
+      .select("-refreshToken");
 
     if (!user) {
       throw new ApiError(401, "User does not exist");
@@ -203,6 +213,12 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!isPasswordValid) {
       throw new ApiError(401, "Incorrect password");
     }
+
+    // Add this validation AFTER password check
+    if (!user?.restaurant) {
+      throw new ApiError(400, "No restaurant linked to this account");
+    }
+
     // Generate JWT token
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
@@ -246,7 +262,6 @@ const loginUser = asyncHandler(async (req, res) => {
           "User Loggedd in successfully"
         )
       );
-    // .redirect(`http://localhost:5174/${uniqueIdentifier}`);
   } catch (err) {
     throw new ApiError(err.statusCode || 500, err.message || "Login failed");
   }
