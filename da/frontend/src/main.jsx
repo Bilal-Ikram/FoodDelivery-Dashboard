@@ -1,13 +1,16 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { MantineProvider } from '@mantine/core'; // Import MantineProvider
 import './index.css'
+import '@mantine/core/styles.css';
+import '@mantine/dropzone/styles.css';
 import App from './Layout.jsx'
 import { RouterProvider } from 'react-router-dom'
 import { createBrowserRouter  } from'react-router-dom'
 import Dashboard from './components/Dashboard/pages/DashBoard.jsx';
 import Orders from './components/Orders/pages/Orders.jsx';
 import Reports from './components/Reportsjsx/pages/Reports.jsx';
-import Invoices from './components/Invoices/Pages/Invoices.jsx';
+import Invoices from './components/Invoices/pages/Invoices.jsx';
 import MenuManagement from './components/MenuManagement/Pages/MenuManagement.jsx';
 import OpeningTime from './components/OpeningTime/pages/OpeningTime.jsx';
 import Support from './components/Support/pages/Support.jsx';
@@ -15,7 +18,7 @@ import UserManagement from './components/UserManagement/pages/UserManagement.jsx
 
 const router = createBrowserRouter([
   {
-    path: "/dashboard/:sessionId",
+    path: "/dashboard/:restaurantId",
     element: <App />,
     // component: NotFound
     children: [
@@ -35,6 +38,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
-  </StrictMode>,
-)
+    <MantineProvider theme={{ colorScheme: 'light' }} withGlobalStyles withNormalizeCSS>
+      <RouterProvider router={router} />
+    </MantineProvider>
+  </StrictMode>
+);

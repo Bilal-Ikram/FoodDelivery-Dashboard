@@ -4,41 +4,36 @@ import jwt from "jsonwebtoken";
 
 const UserSchema = new mongoose.Schema(
   {
-    restaurantName: {
+    restaurant: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Restaurant',
+      required: true,
+      index: true
+    },
+
+    fullName: {
       type: String,
       required: true,
-      lowercase: true,
-      match: /^[a-zA-Z\s]+$/,
+      trim: true,
       minlength: 3,
-      maxlength: 20,
-      trim: true
-    },
-    name: {
-      type: String,
-      required: true
+      maxlength: 50
     },
     email: {
       type: String,
       required: true,
       unique: true,
       lowercase: true,
-      trim: true
+      trim: true,
+      match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     },
     password: {
       type: String,
       required: true
     },
-    phoneNo: {
+    role: {
       type: String,
-      minlength: 11,
-      maxlength: 11,
-      required: true
-    },
-    restaurantAddress: {
-      type: String,
-      minlength: 10,
-      maxlength: 100,
-      required: true
+      enum: ['owner', 'manager', 'staff'],
+      default: 'owner'
     },
     refreshToken: {
       type: String,
@@ -69,7 +64,9 @@ UserSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
-      email: this.email
+      email: this.email,
+      restaurantId: this.restaurant._id,
+      role: this.role
     },
     process.env.ACCESS_TOKEN_SECRET,
     {

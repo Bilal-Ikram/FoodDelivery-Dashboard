@@ -1,30 +1,28 @@
-import  { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
-import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
-import InputField from '../InputField/InputField';
-import Button from '../Button/Button';
-
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import axios from "axios";
+import InputField from "../InputField/InputField";
+import Button from "../Button/Button";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [errors, setErrors] = useState({
-    email: '',
-    password: '',
-    submit: ''
+    email: "",
+    password: "",
+    submit: "",
   });
-  const [focusedInput, setFocusedInput] = useState('');
+  const [focusedInput, setFocusedInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = () => {
     const newErrors = {
-      email: !formData.email ? 'Please enter email.' : '',
-      password: !formData.password ? 'Please enter the password.' : '',
-      submit: ''
+      email: !formData.email ? "Please enter email." : "",
+      password: !formData.password ? "Please enter the password." : "",
+      submit: "",
     };
     setErrors(newErrors);
     return !newErrors.email && !newErrors.password;
@@ -36,46 +34,67 @@ const LoginForm = () => {
 
     setIsLoading(true);
     try {
-      console.log('Attempting login with:', {
-        email: formData.email,
-        password: formData.password?.length > 0 ? 'password-provided' : 'no-password'
-      });
+      // console.log('Attempting login with:', {
+      //   email: formData.email,
+      //   password: formData.password?.length > 0 ? 'password-provided' : 'no-password'
+      // });
 
       const response = await axios.post(
-        'http://localhost:8000/api/v1/restaurants/login',
+        "http://localhost:8000/api/v1/restaurants/login",
         formData,
         {
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
-          withCredentials: true
+          withCredentials: true,
         }
       );
 
-      console.log('Login response:', response.data);
+      console.log("Login response:", response.data);
 
       if (response.data.success) {
         // Add success message
-        console.log('Login successful');
+        console.log("Login successful");
+        console.log("Full response structure:", response.data);
+console.log("Nested restaurant object:", response.data.data.restaurant);
+        // Add null-checking
+        // Safely extract restaurant ID with multiple fallbacks
+        const restaurantId =
+          response.data.data.restaurant?._id;
 
-        // Generate a UUID for the session
-      const sessionId = uuidv4();
-      // Redirect to the external dashboard URL
-  window.location.href = `http://localhost:5174/dashboard/${sessionId}`; // Replace with the correct URL
+        console.log("Full response data:", response.data);
+        console.log("Restaurant ID from response:", restaurantId);
+
+        if (!restaurantId) {
+          console.error("No restaurant ID found in:");
+          setErrors({ submit: "Restaurant configuration missing" });
+          return;
+        }
+
+        // Get REAL restaurant ID from API response
+        // const  restaurantId  = response.data.user.restaurant._id;
+
+        // Store in context/local storage
+        localStorage.setItem("restaurantId", restaurantId);
+        // localStorage.setItem("sessionToken", sessionToken);
+        console.log("Redirecting to dashboard with ID:", restaurantId);
+        // Redirect to the external dashboard URL
+        window.location.href = `http://localhost:5174/dashboard/${restaurantId}`; // Replace with the correct URL
       } else {
-        setErrors(prev => ({
+        setErrors((prev) => ({
           ...prev,
-          submit: response.data.message || 'Login failed'
+          submit: response.data.message || "Login failed",
         }));
       }
     } catch (error) {
-      const errorMessage = error?.response?.data?.message ||
+      const errorMessage =
+        error?.response?.data?.message ||
         error?.message ||
-        'An error occurred during login';
+        "An error occurred during login";
 
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        submit: errorMessage
+        submit: errorMessage,
       }));
     } finally {
       setIsLoading(false);
@@ -97,30 +116,30 @@ const LoginForm = () => {
         value={formData.email}
         onChange={(e) => {
           setFormData({ ...formData, email: e.target.value.trim() });
-          if (errors.email) setErrors({ ...errors, email: '' });
+          if (errors.email) setErrors({ ...errors, email: "" });
         }}
-        onFocus={() => setFocusedInput('email')}
-        onBlur={() => setFocusedInput('')}
+        onFocus={() => setFocusedInput("email")}
+        onBlur={() => setFocusedInput("")}
         label="Email"
         error={errors.email}
-        isFocused={focusedInput === 'email'}
+        isFocused={focusedInput === "email"}
         disabled={isLoading}
       />
 
       <InputField
-        type={showPassword ? 'text' : 'password'}
+        type={showPassword ? "text" : "password"}
         id="password"
         name="password"
         value={formData.password}
         onChange={(e) => {
           setFormData({ ...formData, password: e.target.value });
-          if (errors.password) setErrors({ ...errors, password: '' });
+          if (errors.password) setErrors({ ...errors, password: "" });
         }}
-        onFocus={() => setFocusedInput('password')}
-        onBlur={() => setFocusedInput('')}
+        onFocus={() => setFocusedInput("password")}
+        onBlur={() => setFocusedInput("")}
         label="Password"
         error={errors.password}
-        isFocused={focusedInput === 'password'}
+        isFocused={focusedInput === "password"}
         disabled={isLoading}
         rightIcon={
           <button
@@ -143,12 +162,8 @@ const LoginForm = () => {
         </a>
       </div>
 
-      <Button
-        type="submit"
-        variant="primary"
-        disabled={isLoading}
-      >
-        {isLoading ? 'Logging in...' : 'Log in'}
+      <Button type="submit" variant="primary" disabled={isLoading}>
+        {isLoading ? "Logging in..." : "Log in"}
       </Button>
 
       <div className="text-center">
@@ -158,13 +173,15 @@ const LoginForm = () => {
       <Button
         variant="secondary"
         disabled={isLoading}
-        onClick={() => {/* Add phone login logic */ }}
+        onClick={() => {
+          /* Add phone login logic */
+        }}
       >
         Log in with phone number
       </Button>
 
       <div className="text-center text-gray-600">
-        No account?{' '}
+        No account?{" "}
         <a
           href="#"
           className="text-pink-500 hover:text-pink-600 transition-colors duration-200"

@@ -7,6 +7,7 @@ http://dashboard.localhost:5174/
 npm create vite@latest
 // react dependencies
 npm install lucide-react react react-dom react-router-dom
+npm install @mantine/core @mantine/hooks
 
 // Install tailwindcss and its peer dependencies via npm, and create your tailwind.config.js file.
 npm install -D tailwindcss postcss autoprefixer
@@ -15,7 +16,7 @@ npx tailwindcss init
 // Create a new file named tailwind.config.js
 touch tailwind.config.js
 
-// Add the following content to tailwind.config.js
+// Add the following content to tailwindcss.config.js
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],

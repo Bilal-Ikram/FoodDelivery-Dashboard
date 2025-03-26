@@ -12,6 +12,9 @@ const connectDB = async function dbConnection() {
     try {
         const connectionInstance = await mongoose.connect(`${mongoURL}/${DB_NAME}`,
              {
+                useNewUrlParser: true, // Add this
+                useUnifiedTopology: true, // Add this
+                tls: true, // <<< Enable TLS for Atlas
                 serverSelectionTimeoutMS: 50000, // Increase timeout to 30 seconds
                 socketTimeoutMS: 45000 // Increase socket timeout
               }
