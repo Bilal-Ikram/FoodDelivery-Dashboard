@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
-import fs from "fs";
+import fs from "fs/promises"; // Use promises API
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -7,22 +7,28 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Function to upload a local file to Cloudinary (backend code)
 const uploadOnCloudinary = async (localFilePath) => {
   try {
     if (!localFilePath) return null;
-    //upload the file on cloudinary
+    
+    // Upload with quality adjustment and format optimization
     const response = await cloudinary.uploader.upload(localFilePath, {
       resource_type: "auto",
+      quality: "auto:best",
+      fetch_format: "auto",
     });
-    // file has been uploaded sucessfully
-    // console.log("file has been uploaded on cloudinary", response.url);
-    fs.unlinkSync(localFilePath);
+
     return response;
   } catch (error) {
-    fs.unlinkSync(localFilePath); // remove the locally saved temporary
-    //  file as the upload operation got failed
+    console.error("Cloudinary upload failed:", error);
     return null;
+  } finally {
+    //  attempt cleanup
+    if (localFilePath) {
+      await fs.unlink(localFilePath).catch(error => {
+        console.error("File cleanup error:", error);
+      });
+    }
   }
 };
 

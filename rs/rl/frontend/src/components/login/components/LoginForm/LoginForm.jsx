@@ -55,17 +55,21 @@ const LoginForm = () => {
       if (response.data.success) {
         // Add success message
         console.log("Login successful");
+        console.log("Full response structure:", response.data);
+console.log("Nested restaurant object:", response.data.data.restaurant);
         // Add null-checking
+        // Safely extract restaurant ID with multiple fallbacks
         const restaurantId =
-          response.data.user?.restaurant?._id || response.data.user?.restaurant;
+          response.data.data.restaurant?._id;
+
+        console.log("Full response data:", response.data);
+        console.log("Restaurant ID from response:", restaurantId);
 
         if (!restaurantId) {
-          console.error("No restaurant ID found");
+          console.error("No restaurant ID found in:");
           setErrors({ submit: "Restaurant configuration missing" });
           return;
         }
-        console.log("Restaurant data:", response.data.user.restaurant);
-        console.log("Extracted ID:", response.data.user.restaurant._id);
 
         // Get REAL restaurant ID from API response
         // const  restaurantId  = response.data.user.restaurant._id;
@@ -73,7 +77,7 @@ const LoginForm = () => {
         // Store in context/local storage
         localStorage.setItem("restaurantId", restaurantId);
         // localStorage.setItem("sessionToken", sessionToken);
-
+        console.log("Redirecting to dashboard with ID:", restaurantId);
         // Redirect to the external dashboard URL
         window.location.href = `http://localhost:5174/dashboard/${restaurantId}`; // Replace with the correct URL
       } else {

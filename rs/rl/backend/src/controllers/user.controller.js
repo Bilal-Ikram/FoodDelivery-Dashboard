@@ -248,16 +248,14 @@ const loginUser = asyncHandler(async (req, res) => {
       .json(
         new ApiResponse(
           200,
-          {
-            user: {
-              _id: user._id,
-              name: user.fullName,
-              email: user.email,
-              role: user.role,
-              restaurant: user.restaurant,
-            },
+          { // 👇 Correct structure: data directly in response
+            _id: user._id,
+            name: user.fullName,
+            email: user.email,
+            role: user.role,
+            restaurant: user.restaurant,
             accessToken,
-            refreshToken,
+            refreshToken
           },
           "User Loggedd in successfully"
         )
