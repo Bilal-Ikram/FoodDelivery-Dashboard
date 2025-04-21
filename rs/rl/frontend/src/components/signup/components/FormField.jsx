@@ -5,6 +5,9 @@ const FormField = ({
   label,
   name,
   type = 'text',
+  maxLength,
+  pattern,
+  title,
   value,
   onChange,
   onBlur,
@@ -53,7 +56,7 @@ const FormField = ({
   return (
     <div className="relative mb-12">
       <label
-        className={`absolute -top-2 z-10 left-3 text-sm bg-white px-1 font-roboto font-light transition-colors duration-200 ${labelColor}`}
+        className={`absolute -top-2 z-10 left-3 text-xs md:text-sm bg-white px-1 font-roboto font-light transition-colors duration-200 ${labelColor}`}
       >
         {label}*
       </label>
@@ -62,12 +65,15 @@ const FormField = ({
           type={inputType}
           name={name}
           value={value}
+          maxLength={maxLength}
+          pattern={pattern}
+          title={title}
           required={true}
           onChange={onChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
           aria-describedby={ariaDescribedby}
-          className={`block w-[440px] rounded-md border px-3 py-[8px] ${borderColor}
+          className={`block w-full md:w-[440px] md:text-base text-sm rounded-md border py-2 px-3 md:py-2 ${borderColor}
             text-[#333] transition-colors duration-200
             focus:outline-none 
             ${showError ? 'focus:ring-red-500' : 'focus:ring-pink-500'}

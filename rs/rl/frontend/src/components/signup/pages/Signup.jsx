@@ -147,8 +147,8 @@ export default function SignupPage() {
           />
         </header>
 
-        <main className="flex-1 overflow-auto px-2 py-6 mt-8 ml-24">
-          <div className="max-w-[520px] bg-white shadow-lg p-8">
+        <main className="flex-1 overflow-auto px-2 py-6 mt-8 md:ml-24">
+          <div className="max-w-[520px] bg-white shadow-lg p-8 rounded-md">
             <h2 className="text-xl font-roboto font-black text-center mb-6 text-[#4a4a4a] text-wrap">
               Interested? Fill out the form below to become our partner and increase your income!
             </h2>

@@ -32,7 +32,7 @@ const createMenu = asyncHandler(async (req, res) => {
       const size = String(v.size).trim().toLowerCase();
       const price = parseFloat(v.price);
       
-      if (size.length < 3) {
+      if (size.length <= 3) {
         throw new ApiError(400, "Size must be at least 3 characters");
       }
       

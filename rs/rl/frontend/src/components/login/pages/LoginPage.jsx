@@ -41,7 +41,7 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-white flex flex-col md:flex-row">
       {/* Left Section */}
-      <div className="w-full md:w-1/2 p-8 md:p-12 lg:p-16 bg-[#f9f9f9] m-5 rounded-3xl flex justify-center items-center flex-col flex-1 overflow-hidden ">
+      <div className="w-full md:w-1/2 p-8 md:p-12 lg:p-16 bg-[#f9f9f9] m-5 rounded-3xl md:flex justify-center items-center flex-col flex-1 overflow-hidden  hidden ">
         <div className="mb-8">
           <RestaurantIllustration />
         </div>
@@ -50,7 +50,7 @@ const LoginPage = () => {
           Transform your business<br />with Panda Partner
         </h1>
 
-        <div className="space-y-6 ">
+        <div className="space-y-6 hidden md:block">
           {features.map((feature, index) => (
             <FeatureItem
               key={index}

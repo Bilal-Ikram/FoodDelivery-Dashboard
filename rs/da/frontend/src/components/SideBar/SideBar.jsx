@@ -17,7 +17,7 @@ export default function Component() {
               <Sidebar.Item as={Link} to={``} className="mb-4 text-xl  focus:text-pink-600 focus:border-solid focus:border-pink-600 focus:border-l-4 focus:rounded-none">
                 Dashboard
               </Sidebar.Item>
-              <Sidebar.Item as={Link} to={`orders`} className="mb-4 text-xl  focus:text-pink-600 focus:border-solid focus:border-pink-600 focus:border-l-4 focus:rounded-none">
+              {/* <Sidebar.Item as={Link} to={`orders`} className="mb-4 text-xl  focus:text-pink-600 focus:border-solid focus:border-pink-600 focus:border-l-4 focus:rounded-none">
                 Orders
               </Sidebar.Item>
               <Sidebar.Item as={Link} to={`reports`} className="mb-4 text-xl  focus:text-pink-600 focus:border-solid focus:border-pink-600 focus:border-l-4 focus:rounded-none">
@@ -25,19 +25,19 @@ export default function Component() {
               </Sidebar.Item>
               <Sidebar.Item as={Link} to={`invoices`} className="mb-4 text-xl  focus:text-pink-600 focus:border-solid focus:border-pink-600 focus:border-l-4 focus:rounded-none">
                 Invoices
-              </Sidebar.Item>
+              </Sidebar.Item> */}
               <Sidebar.Item as={Link} to={`menu-management`} className="mb-4 text-xl  focus:text-pink-600 focus:border-solid focus:border-pink-600 focus:border-l-4 focus:rounded-none">
                 Menu Management
               </Sidebar.Item>
               <Sidebar.Item as={Link} to={`opening-time`} className="mb-4 text-xl  focus:text-pink-600 focus:border-solid focus:border-pink-600 focus:border-l-4 focus:rounded-none">
                 Opening Time
               </Sidebar.Item>
-              <Sidebar.Item as={Link} to={`user-management`} className="mb-4 text-xl  focus:text-pink-600 focus:border-solid focus:border-pink-600 focus:border-l-4 focus:rounded-none">
+              {/* <Sidebar.Item as={Link} to={`user-management`} className="mb-4 text-xl  focus:text-pink-600 focus:border-solid focus:border-pink-600 focus:border-l-4 focus:rounded-none">
                 User Management
               </Sidebar.Item>
               <Sidebar.Item as={Link} to={`support`} className="mb-4 text-xl  focus:text-pink-600 focus:border-solid focus:border-pink-600 focus:border-l-4 focus:rounded-none">
                 Support
-              </Sidebar.Item>
+              </Sidebar.Item> */}
             </Sidebar.ItemGroup>
           </Sidebar.Items>
         </Sidebar>

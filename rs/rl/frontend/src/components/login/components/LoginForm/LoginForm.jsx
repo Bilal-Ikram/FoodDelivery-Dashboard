@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { Link } from 'react-router-dom';
 import axios from "axios";
 import InputField from "../InputField/InputField";
 import Button from "../Button/Button";
@@ -145,7 +146,7 @@ console.log("Nested restaurant object:", response.data.data.restaurant);
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+            className="text-gray-500 hover:text-gray-700 transition-colors duration-200 pr-1 pt-1"
             disabled={isLoading}
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -154,19 +155,20 @@ console.log("Nested restaurant object:", response.data.data.restaurant);
       />
 
       <div className="flex justify-end">
-        <a
-          href="#"
+        <Link
+          to="/forgot-password"
+          onClick={() => setErrors({ ...errors, submit: "" })}
           className="text-pink-500 hover:text-pink-600 transition-colors duration-200 text-sm"
         >
           Forgot password?
-        </a>
+        </Link>
       </div>
 
       <Button type="submit" variant="primary" disabled={isLoading}>
         {isLoading ? "Logging in..." : "Log in"}
       </Button>
 
-      <div className="text-center">
+      {/* <div className="text-center">
         <p className="text-gray-600">OR</p>
       </div>
 
@@ -174,20 +176,20 @@ console.log("Nested restaurant object:", response.data.data.restaurant);
         variant="secondary"
         disabled={isLoading}
         onClick={() => {
-          /* Add phone login logic */
+          /* Add phone login logic 
         }}
       >
         Log in with phone number
-      </Button>
+      </Button> */}
 
       <div className="text-center text-gray-600">
         No account?{" "}
-        <a
-          href="#"
+        <Link
+          to="/signup"
           className="text-pink-500 hover:text-pink-600 transition-colors duration-200"
         >
           Partner with Foodpanda
-        </a>
+        </Link>
       </div>
     </form>
   );

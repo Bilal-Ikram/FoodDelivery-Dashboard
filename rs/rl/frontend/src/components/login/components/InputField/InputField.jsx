@@ -24,7 +24,7 @@ const InputField = ({
           onChange={onChange}
           onFocus={onFocus}
           onBlur={onBlur}
-          className="w-[480px] px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent border border-gray-300  hover:border-gray-400"
+          className="w-full md:w-[480px] px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent border border-gray-300  hover:border-gray-400"
           required
         />
         <label 
