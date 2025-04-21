@@ -154,7 +154,7 @@ console.log("Nested restaurant object:", response.data.data.restaurant);
         }
       />
 
-      <div className="flex justify-end">
+{/*       <div className="flex justify-end">
         <Link
           to="/forgot-password"
           onClick={() => setErrors({ ...errors, submit: "" })}
@@ -162,7 +162,7 @@ console.log("Nested restaurant object:", response.data.data.restaurant);
         >
           Forgot password?
         </Link>
-      </div>
+      </div> */}
 
       <Button type="submit" variant="primary" disabled={isLoading}>
         {isLoading ? "Logging in..." : "Log in"}
